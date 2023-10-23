@@ -52,15 +52,15 @@ export async function createVariant({
 
 	const data: NewVariant = {
 		values: [
-			{ pt: product.variants[indexOfVariant]?.properties[0]?.value },
-			{ pt: product.variants[indexOfVariant]?.properties[1]?.value },
+			{ pt: product.variants[indexOfVariant].properties[0].value },
+			{ pt: product.variants[indexOfVariant].properties[1].value },
 		],
-		price: product.variants[indexOfVariant]?.resell_price || 0,
+		price: product.variants[indexOfVariant].resell_price,
 		weight: product.gross_weight / 1000,
-		stock: product.variants[indexOfVariant]?.inventory || 0,
-		height: product.height || 0,
-		width: product.width || 0,
-		sku: product.variants[indexOfVariant]?.sku || '',
+		stock: product.variants[indexOfVariant].inventory,
+		height: product.height,
+		width: product.width,
+		sku: product.variants[indexOfVariant].sku,
 	};
 
 	const config = {
@@ -74,10 +74,22 @@ export async function createVariant({
 		`https://api.tiendanube.com/v1/${3863345}/products/${productId}/variants`,
 		data,
 		config
-		)
+	)
+
+	console.log(response.data)
 }
 
-export async function createImage({
+export async function createAllVariants(product: any) {
+	for (let indexOfVariant = 1; indexOfVariant < product.variants.length; indexOfVariant++) {
+		createVariant({
+			product,
+			indexOfVariant,
+			productId: 187894758
+		})
+	}
+}
+
+export async function createImageFromProduct({
 	product,
 	indexOfVariant
 }: {
@@ -102,24 +114,15 @@ export async function createImage({
 		)
 }
 
-export async function createAllImages(product: any) {
+export async function createAllImagesFromProduct(product: any) {
 	for (let indexOfVariant = 1; indexOfVariant < product.variants.length; indexOfVariant++) {
-		await createImage({
+		await createImageFromProduct({
 			product,
 			indexOfVariant
 		})
 	}
 }
 
-export async function createAllVariants(product: any) {
-	for (let indexOfVariant = 1; indexOfVariant < product.variants.length; indexOfVariant++) {
-		await createVariant({
-			product,
-			indexOfVariant,
-			productId: 187894758
-		})
-	}
-}
 
 export async function createNewProduct(newProduct: any) {
 	const data: NuvemShopNewProduct = {
@@ -169,7 +172,7 @@ export async function changeProductPrice({newPrice, productId}: {newPrice: numbe
 		}
 	};
 
-	const response = await axios.put(`https://api.tiendanube.com/v1/${3863345}/products/${productId}`, data, config)
+	const response = await axios.put(`https://api.tiendanube.com/v1/${3863345}/products/${productId}/variants/${742793893}`, data, config)
 }
 
 export async function changeProductName({newName, productId}: {newName: string, productId: number}) {
@@ -199,7 +202,7 @@ export async function changeProductStock({newStock, productId}: {newStock: numbe
 		}
 	};
 
-	const response = await axios.put(`https://api.tiendanube.com/v1/${3863345}/products/${productId}/variants/${740254919}`, data, config)
+	const response = await axios.put(`https://api.tiendanube.com/v1/${3863345}/products/${productId}/variants/${742793893}`, data, config)
 }
 
 export async function createUser() {
