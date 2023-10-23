@@ -1,18 +1,24 @@
 import { 
-  changeProductName,
-  changeProductPrice,
-  changeProductStock,
-  createAllImagesFromProduct,
-  createAllVariants,
-  createImageFromProduct,
+  getAuthToken,
   createNewProduct, 
-  createUser, 
+  createAllImagesFromProduct, 
+  createImageFromProduct, 
+  createAllVariants, 
   createVariant, 
+  changeProductName, 
+  changeProductPrice, 
+  changeProductStock 
+} from "api-nuvemshop/get";
+
+import { 
+  createUser, 
   getAllProducts, 
-  getAuthToken, 
   getFullProduct, 
   loginUser 
 } from "products/get";
+
+const productId = 187894758
+const productVariantId = 744096259
 
 const user = await createUser()
 
@@ -27,29 +33,39 @@ const authResponse = await getAuthToken('bfd3ca5ba2e6062257d646a95b9b5314bafad0e
 
 await createNewProduct(chosenProduct)
 
-await createAllImagesFromProduct(chosenProduct)
+await createAllImagesFromProduct({
+  product: chosenProduct,
+  productId
+})
 
-await createImageFromProduct({product: chosenProduct, indexOfVariant: 10})
+await createImageFromProduct({
+  product: 
+  chosenProduct, 
+  indexOfVariant: 10, 
+  productId
+})
 
 await createAllVariants(chosenProduct)
 
 await createVariant({
   product: chosenProduct,
   indexOfVariant: 6,
-  productId: 187894758
+  productId
 })
 
 await changeProductName({
   newName: 'new name',
-  productId: 187894758
+  productId
 })
 
 await changeProductPrice({
   newPrice: 20,
-  productId: 187894758
+  productId,
+  productVariantId
 })
 
 await changeProductStock({
-  newStock: 20,
-  productId: 187894758
+  newStock: 101,
+  productId,
+  productVariantId
 })
